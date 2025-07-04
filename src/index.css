@@ -7,3 +7,7 @@
     margin: 0; 
     padding: 0;
   }
+/* Quita subrayado solo en los números del calendario */
+.fc-daygrid-day-number {
+  text-decoration: none !important;
+}

@@ -1,10 +1,12 @@
-import {React} from 'react'
+import {React, useState} from 'react'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import listPlugin from '@fullcalendar/list'
 import multiMonthPlugin from '@fullcalendar/multimonth'
 import esLocale from '@fullcalendar/core/locales/es';
+import Axios from '../../components/Axios'
+import Modal from '../../components/Modal'
 
 const MyCalendar2 = () => {
   // dayGridDay, dayGridWeek, dayGridMonth, dayGridYear
@@ -12,7 +14,18 @@ const MyCalendar2 = () => {
   // listDay, listWeek, listMonth, listYear
   // multiMonthYear
 
+  const [formData, setFormData] = useState({
+    start: '', 
+    end: ''
+  })
+
+  const getData = Axios.get('users')
+                    .then(response => console.log(response.data))
+                    .catch(error => console.log(error));
+
   return (
+    <>
+    <Modal formData={formData}></Modal>
     <FullCalendar
         plugins={[ dayGridPlugin, timeGridPlugin, listPlugin,multiMonthPlugin ]}
         initialView="dayGridMonth"
@@ -40,6 +53,7 @@ const MyCalendar2 = () => {
           right: 'dayGridMonth, timeGridWeek, listDay, multiMonth3'
         }}
     />
+    </>
   )
 }
 
