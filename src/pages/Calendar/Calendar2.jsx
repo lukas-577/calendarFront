@@ -1,4 +1,4 @@
-import {React, useState} from 'react'
+import {React, useState, useEffect} from 'react'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
@@ -15,27 +15,45 @@ const MyCalendar2 = () => {
   // multiMonthYear
 
   const [formData, setFormData] = useState({
-    start: '', 
-    end: ''
-  })
+    start: '',
+    end: '',
+    hora: '',
+    titulo: '',
+    fecha: ''
+  });
 
-  const getData = Axios.get('users')
+  const getData = Axios.get('fechas')
                     .then(response => console.log(response.data))
                     .catch(error => console.log(error));
 
+  const [events, setEvents] = useState([]); // Estado para los eventos
+
+  useEffect(() => {
+    Axios.get('fechas')
+      .then(response => {
+        console.log('Datos del backend:', response.data);
+        
+        const eventosFormateados = response.data.map(item => ({
+          title: item.titulo,
+          start: item.hora
+            ? `${item.fecha}T${item.hora}` // evento con hora específica
+            : item.fecha, // evento de todo el día
+        }));
+
+        setEvents(eventosFormateados);
+      })
+      .catch(error => console.error('Error al obtener eventos:', error));
+  }, []);
+
   return (
     <>
-    <Modal formData={formData}></Modal>
+    <Modal formData={formData} setFormData={setFormData}></Modal>
     <FullCalendar
         plugins={[ dayGridPlugin, timeGridPlugin, listPlugin,multiMonthPlugin ]}
         initialView="dayGridMonth"
         locale={esLocale}
         slotLabelFormat={{ hour: '2-digit', minute: '2-digit', hour12: false }}
-        events={[
-            {title : 'Event #1', start: '2025-07-17'},
-            {title : 'Event #2', start: '2025-07-19', end: '2025-07-21'},
-            {title : 'Event #3', start: '2025-07-01T12:00:00', allDay: false},
-        ]}
+        events={events}
 
         views = {{
            multiMonth3:{

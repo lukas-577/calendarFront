@@ -3,26 +3,35 @@ import { Outlet } from 'react-router-dom'
 import Axios from './Axios'
 import dayjs from 'dayjs';
 
-function Modal({formData}) {
+function Modal({formData, setFormData}) {
 
 
     const handleSubmint = (event) =>{
         event.preventDefault()
 
-        const StartDate = dayjs(formData.start["$d"]).format("YYYY-MM-DD")
+        const StartDate = dayjs(event.target.fecha.value).format("YYYY-MM-DD");
         const EndDate = dayjs(formData.end["$d"]).format("YYYY-MM-DD")
+        const horaFormateada = formData.hora;  
+        const titulo = formData.titulo;
 
-        Axios.post(`users/`,{
-        id:2,
-        name: StartDate, 
-        email: EndDate, 
+        Axios.post(`fechas/`,{
+            fecha: StartDate, 
+            hora: horaFormateada,
+            titulo : titulo
         })
         .then((res) =>{
-        console.log(res)
-        window.location.reload()
+            console.log(res)
+            window.location.reload()
         })
+        .catch((err) => {
+            console.error('Error al guardar fecha:', err.response?.data || err.message);
+        });
 
     }
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
 
 
     return (
@@ -43,12 +52,24 @@ function Modal({formData}) {
                 </div>
                 <div class="modal-body">
                 <div class="mb-3">
+                    <label for="titulo" class="form-label">Titulo</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        id="titulo"
+                        name="titulo"
+                        value={formData.titulo}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+                <div class="mb-3">
                     <label for="fecha" class="form-label">Fecha</label>
-                    <input type="date" class="form-control" id="fecha" name="fecha" required></input>
+                    <input type="date" class="form-control" id="fecha" name="fecha" value={formData.fecha} onChange={handleChange} required></input>
                 </div>
                 <div class="mb-3">
                     <label for="hora" class="form-label">Hora</label>
-                    <input type="time" class="form-control" id="hora" name="hora" required></input>
+                    <input type="time" class="form-control" id="hora" name="hora" value={formData.hora} onChange={handleChange} required></input>
                 </div>
                 </div>
                 <div class="modal-footer">
