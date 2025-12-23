@@ -12,12 +12,16 @@ function Modal({formData, setFormData}) {
         const StartDate = dayjs(event.target.fecha.value).format("YYYY-MM-DD");
         const EndDate = dayjs(formData.end["$d"]).format("YYYY-MM-DD")
         const horaFormateada = formData.hora;  
-        const titulo = formData.titulo;
+        const nombre = formData.nombre;
+        const imagen = formData.file;
+        const descripcion = formData.descripcion
 
-        Axios.post(`fechas/`,{
+        Axios.post(`lugares/`,{
             fecha: StartDate, 
             hora: horaFormateada,
-            titulo : titulo
+            nombre : nombre,
+            descripcion: descripcion,
+            imagen: imagen
         })
         .then((res) =>{
             console.log(res)
@@ -52,15 +56,27 @@ function Modal({formData, setFormData}) {
                 </div>
                 <div class="modal-body">
                 <div class="mb-3">
-                    <label for="titulo" class="form-label">Titulo</label>
+                    <label for="nombre" class="form-label">Nombre Lugar</label>
                     <input
                         type="text"
                         className="form-control"
-                        id="titulo"
-                        name="titulo"
-                        value={formData.titulo}
+                        id="nombre"
+                        name="nombre"
+                        value={formData.nombre}
                         onChange={handleChange}
                         required
+                    />
+                </div>
+                <div className="mb-3">
+                    <label className="form-label">Imagen</label>
+                    <input
+                        type="file"
+                        className="form-control"
+                        accept="image/*"
+                        id="imagen"
+                        name="imagen"
+                        value={formData.imagen}
+                        onChange={(e) => setFile(e.target.files[0])}
                     />
                 </div>
                 <div class="mb-3">

@@ -1,5 +1,5 @@
 import React from "react";
-import SelectorDeHorario from "../../components/SeleccionFecha";
+import SelectorDeHorario from "../../components/SelectorDeHorario";
 
 function Home(){
     return(

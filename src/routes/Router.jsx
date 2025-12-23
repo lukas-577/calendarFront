@@ -5,6 +5,7 @@ import { ProtectedRute } from '../components/ProtectedRute'
 import Home from '../pages/Home/Home'
 import MyCalendar1 from '../pages/Calendar/Calendar1'
 import MyCalendar2 from '../pages/Calendar/Calendar2'
+import Lugares from '../pages/Lugares/Lugares'
 
 
 const Router = createBrowserRouter([
@@ -26,6 +27,11 @@ const Router = createBrowserRouter([
                 path: "/calendario2",
                 element:
                     <MyCalendar2></MyCalendar2>
+            },
+            {
+                path: "/lugares",
+                element:
+                    <Lugares></Lugares>
             },
         ]
     }
